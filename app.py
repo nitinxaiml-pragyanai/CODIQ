@@ -91,8 +91,13 @@ st.markdown("""
 # 2. INTELLIGENCE CORE
 # ==========================================
 def get_api_key():
-    try: return st.secrets["ANTHROPIC_API_KEY"]
-    except: return None
+    """
+    Strictly fetches from Streamlit Secrets.
+    """
+    try:
+        return st.secrets["ANTHROPIC_API_KEY"]
+    except:
+        return None
 
 def generate_code_sonnet(client, prompt, mode="genesis"):
     """
@@ -161,18 +166,25 @@ def process_response(raw_text):
 st.title("🧠 SAMRION CODIQ")
 st.caption("ULTIMATE INFRASTRUCTURE ARCHITECT")
 
-# Sidebar
+# --- AUTHENTICATION CHECK ---
+api_key = get_api_key()
+
+# Sidebar (Minimalist Status Only)
 with st.sidebar:
     st.image("https://img.icons8.com/ios-filled/100/D60000/artificial-intelligence.png", width=50)
     st.markdown("### SYSTEM STATUS")
     
-    api_key_input = st.text_input("API KEY (Anthropic)", type="password")
-    api_key = get_api_key() or api_key_input
-    
     if api_key:
         st.success("🟢 ONLINE: SONNET 3.5")
     else:
-        st.error("🔴 OFFLINE: MISSING KEY")
+        st.error("🔴 OFFLINE: KEY MISSING")
+        st.markdown("""
+        <small style="color: #ff9999;">
+        ⚠️ **Action Required:**<br>
+        Go to Streamlit Settings > Secrets<br>
+        Add: <code>ANTHROPIC_API_KEY</code>
+        </small>
+        """, unsafe_allow_html=True)
         
     st.markdown("---")
     st.markdown("""
@@ -197,7 +209,7 @@ with tab_gen:
         
         if st.button("🚀 INITIATE GENERATION", key="btn_gen", use_container_width=True):
             if not api_key:
-                st.toast("⚠️ ACCESS DENIED: NO API KEY", icon="🔒")
+                st.toast("⚠️ CRITICAL: API KEY MISSING IN SECRETS", icon="🔒")
             elif not idea_prompt:
                 st.toast("⚠️ DATA MISSING: INPUT PARAMETERS", icon="🚫")
             else:
@@ -245,7 +257,7 @@ with tab_fix:
     
     if st.button("🚑 REFACTOR & HEAL", key="btn_fix", use_container_width=True):
          if not api_key:
-            st.toast("⚠️ ACCESS DENIED", icon="🔒")
+            st.toast("⚠️ ACCESS DENIED: CHECK SECRETS", icon="🔒")
          else:
             client = anthropic.Anthropic(api_key=api_key)
             with st.spinner("🩺 DIAGNOSING..."):
