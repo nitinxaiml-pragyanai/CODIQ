@@ -9,13 +9,13 @@ import time
 # 1. CONFIGURATION & ROYAL THEME
 # ==========================================
 st.set_page_config(
-    page_title="SAMRION CODIQ | ULTIMATE",
+    page_title="SAMRION CODIQ",
     page_icon="🧠",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
-# === THE ROYAL BLUE & RED CSS PATCH (LEGENDARY EDITION) ===
+# === THE ROYAL BLUE & RED CSS PATCH (CLEAN MODE) ===
 st.markdown("""
 <style>
     /* GLOBAL FONT & COLOR */
@@ -64,16 +64,11 @@ st.markdown("""
         background: linear-gradient(135deg, #ff1a1a 0%, #b30000 100%) !important;
     }
 
-    /* CODE BLOCKS */
-    code { color: #ff9999 !important; }
-    .stCodeBlock { border-radius: 10px; border: 1px solid #333; }
-
-    /* SIDEBAR */
+    /* REMOVE SIDEBAR COMPLETELY */
     [data-testid="stSidebar"] {
-        background-color: #000a1f;
-        border-right: 1px solid #D60000;
+        display: none;
     }
-
+    
     /* FOOTER */
     .footer {
         position: fixed; left: 0; bottom: 0; width: 100%;
@@ -91,13 +86,8 @@ st.markdown("""
 # 2. INTELLIGENCE CORE
 # ==========================================
 def get_api_key():
-    """
-    Strictly fetches from Streamlit Secrets.
-    """
-    try:
-        return st.secrets["ANTHROPIC_API_KEY"]
-    except:
-        return None
+    try: return st.secrets["ANTHROPIC_API_KEY"]
+    except: return None
 
 def generate_code_sonnet(client, prompt, mode="genesis"):
     """
@@ -114,10 +104,6 @@ def generate_code_sonnet(client, prompt, mode="genesis"):
     <file name="filename.ext">
     ... content ...
     </file>
-    
-    Example:
-    <file name="app.py">import streamlit...</file>
-    <file name="requirements.txt">streamlit</file>
     
     STYLE GUIDE:
     - Use production-grade error handling.
@@ -152,47 +138,17 @@ def process_response(raw_text):
                 zf.writestr(filename, content.strip())
         zip_buffer.seek(0)
         return "MULTI", zip_buffer, matches
-    
     elif len(matches) == 1:
         filename, content = matches[0]
         return "SINGLE", content.strip(), filename
-        
     else:
         return "SINGLE", raw_text, None
 
 # ==========================================
-# 3. INTERFACE LAYER
+# 3. INTERFACE LAYER (NO SIDEBAR)
 # ==========================================
 st.title("🧠 SAMRION CODIQ")
 st.caption("ULTIMATE INFRASTRUCTURE ARCHITECT")
-
-# --- AUTHENTICATION CHECK ---
-api_key = get_api_key()
-
-# Sidebar (Minimalist Status Only)
-with st.sidebar:
-    st.image("https://img.icons8.com/ios-filled/100/D60000/artificial-intelligence.png", width=50)
-    st.markdown("### SYSTEM STATUS")
-    
-    if api_key:
-        st.success("🟢 ONLINE: SONNET 3.5")
-    else:
-        st.error("🔴 OFFLINE: KEY MISSING")
-        st.markdown("""
-        <small style="color: #ff9999;">
-        ⚠️ **Action Required:**<br>
-        Go to Streamlit Settings > Secrets<br>
-        Add: <code>ANTHROPIC_API_KEY</code>
-        </small>
-        """, unsafe_allow_html=True)
-        
-    st.markdown("---")
-    st.markdown("""
-    **CAPABILITIES:**
-    * ⚡ Auto-Zip Packaging
-    * 🔍 Logic Diagnosis
-    * 🎨 Samrion Theme Injection
-    """)
 
 # Tabs
 tab_gen, tab_fix = st.tabs(["✨ GENESIS PROTOCOL", "🚑 SURGEON PROTOCOL"])
@@ -208,6 +164,7 @@ with tab_gen:
                                    placeholder="e.g. 'Build a Crypto Dashboard with API integration and a requirements file.'")
         
         if st.button("🚀 INITIATE GENERATION", key="btn_gen", use_container_width=True):
+            api_key = get_api_key()
             if not api_key:
                 st.toast("⚠️ CRITICAL: API KEY MISSING IN SECRETS", icon="🔒")
             elif not idea_prompt:
@@ -256,6 +213,7 @@ with tab_fix:
     broken_code = st.text_area("Inject Broken Kernel...", height=200)
     
     if st.button("🚑 REFACTOR & HEAL", key="btn_fix", use_container_width=True):
+         api_key = get_api_key()
          if not api_key:
             st.toast("⚠️ ACCESS DENIED: CHECK SECRETS", icon="🔒")
          else:
@@ -280,6 +238,6 @@ with tab_fix:
 # FOOTER
 st.markdown("""
 <div class="footer">
-    POWERED BY SAMRION INTELLIGENCE | FOUNDER: NITIN RAJ | SAMRION AI INFRASTRUCTURE
+    POWERED BY SAMRION INTELLIGENCE | FOUNDER: NITIN RAJ | MIRZAPUR INFRASTRUCTURE
 </div>
 """, unsafe_allow_html=True)
