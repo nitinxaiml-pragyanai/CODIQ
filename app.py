@@ -9,7 +9,7 @@ from groq import Groq
 # 1. CONFIGURATION & CODIQ OMEGA THEME
 # ==========================================
 st.set_page_config(
-    page_title="SAMRION CODIQ",
+    page_title="CODIQ",
     page_icon="🧠",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -206,10 +206,10 @@ def process_response(raw_text):
 # ==========================================
 # 3. INTERFACE LAYER
 # ==========================================
-st.title("🧠 SAMRION CODIQ")
+st.title("CODIQ")
 st.markdown("### ULTIMATE INFRASTRUCTURE ARCHITECT")
 
-tab_gen, tab_fix = st.tabs(["✨ GENESIS PROTOCOL", "🚑 SURGEON PROTOCOL"])
+tab_gen, tab_fix = st.tabs(["✨ MAKE CODE", "FIX CODE"])
 
 # === TAB 1: GENESIS ===
 with tab_gen:
@@ -272,7 +272,7 @@ with tab_gen:
 # === TAB 2: SURGEON ===
 with tab_fix:
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("#### 🩺 CODE REPAIR & OPTIMIZATION")
+    st.markdown("####  CODE FIX & OPTIMIZATION")
     broken_code = st.text_area("Inject Broken Kernel...", height=200)
     
     if st.button("🚑 REFACTOR & HEAL", key="btn_fix", use_container_width=True):
